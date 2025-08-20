@@ -20,7 +20,7 @@ display:flex;align-items:center;justify-content:center;padding:32px;}
 .bubble.wide{width:100%;}
 .bot .bubble{background:var(--bot);border-top-left-radius:6px}
 .user{justify-content:flex-end}.user .bubble{background:var(--user);border-top-right-radius:6px}
-.avatar{width:28px;height:28px;border-radius:8px;background:#eef3ff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--blue)}
+.avatar{width:28px;height:28px;border-radius:8px;background:#eef3ff;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0f4ae2}
 .meta{font-size:11px;color:#93a0b5;margin-top:4px}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px;padding:8px 16px 0}

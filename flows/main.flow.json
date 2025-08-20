@@ -1,1 +1,65 @@
-{"start":"start","fallback":"fallback","nodes":[]}
+{
+  "start": "start",
+  "fallback": "fallback",
+  "nodes": [
+    {
+      "id": "start",
+      "say": "Welkom! Typ 'FAQ' of kies een optie.",
+      "buttons": [
+        "FAQ",
+        "Plan een demo",
+        "Contact"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "intent": "faq"
+          },
+          "to": "faq.menu"
+        }
+      ],
+      "fallback": "fallback"
+    },
+    {
+      "id": "faq.menu",
+      "say": "(Wordt client-side mooi gerenderd.)",
+      "buttons": [
+        "Plan een demo",
+        "Contact"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "^\\s*([1-9]|1[0-4])\\s*$"
+          },
+          "to": "faq.q$1"
+        }
+      ],
+      "fallback": "faq.menu"
+    },
+    {
+      "id": "faq.q1",
+      "say": "VANA Chat is een AI-gestuurde chatbot…"
+    },
+    {
+      "id": "faq.q2",
+      "say": "Geschikt voor mkb…"
+    },
+    {
+      "id": "faq.q3",
+      "say": "Starter-pakket…"
+    },
+    {
+      "id": "faq.q4",
+      "say": "Binnen ~1 week…"
+    },
+    {
+      "id": "fallback",
+      "say": "Sorry, dat begreep ik niet. Typ 'FAQ' of kies een optie.",
+      "buttons": [
+        "FAQ",
+        "Plan een demo"
+      ]
+    }
+  ]
+}

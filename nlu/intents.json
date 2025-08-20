@@ -1,1 +1,15 @@
-{"faq":["faq"],"demo":["demo"]}
+{
+  "faq": [
+    "faq",
+    "veelgestelde",
+    "vragen",
+    "help",
+    "informatie"
+  ],
+  "demo": [
+    "demo",
+    "plan een demo",
+    "afspraak",
+    "presentatie"
+  ]
+}

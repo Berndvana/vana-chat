@@ -4,6 +4,8 @@ const chips = document.getElementById('chips');
 const input = document.getElementById('input');
 const send  = document.getElementById('send');
 
+const API_PATH = '/api/chat'; // Vercel serverless route
+
 const timeNow = () => new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 
 function bubble(text, who='bot', withMeta=true){
@@ -58,7 +60,7 @@ async function openPlanner() {
 function closePlanner() { document.getElementById('planner-overlay').style.display = 'none'; }
 document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='planner-close') closePlanner(); });
 
-// --- SaaS WOW data ---
+// Data
 const faqItems = [
   {n:1,  t:'Wat is VANA Chat precies?',                 cat:'Algemeen',    p:'Wat doet de chatbot en hoe helpt hij klanten?', icon:'💡'},
   {n:2,  t:'Voor wie is VANA Chat geschikt?',           cat:'Algemeen',    p:'Sectoren en type bedrijven die profiteren.',   icon:'👥'},
@@ -77,7 +79,7 @@ const faqItems = [
 ];
 const tabs = ['Alle','Algemeen','Prijzen','Integraties','Veiligheid','Werking'];
 
-// Render WOW FAQ
+// UI renderers
 function renderFAQMenu(){
   const row = document.createElement('div'); row.className = 'msg bot';
   const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
@@ -136,7 +138,6 @@ function renderFAQMenu(){
   drawTabs(); draw();
 }
 
-// Answer overlay
 function openAnswer(title, text){
   const overlay = document.getElementById('answer-overlay');
   document.getElementById('answer-title').textContent = title || 'Antwoord';
@@ -155,7 +156,7 @@ async function sendMessage(){
   input.value = '';
 
   typing(true);
-  const res = await fetch('/chat', {
+  const res = await fetch(API_PATH, {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ text, nodeId: currentNode })
   }).catch(()=>null);
@@ -165,14 +166,12 @@ async function sendMessage(){
   const data = await res.json();
   currentNode = data.nodeId;
 
-  // Intercept FAQ menu
   if (data.nodeId === 'faq.menu') {
     renderFAQMenu();
     setChips(['Plan een demo','Contact']);
     return;
   }
 
-  // Intercept FAQ answers (faq.q1..faq.q14)
   if (/^faq\.q\d+$/.test(data.nodeId)) {
     const item = faqItems.find(x => `faq.q${x.n}` === data.nodeId);
     openAnswer(item ? item.t : 'Antwoord', data.say);
@@ -180,7 +179,6 @@ async function sendMessage(){
     return;
   }
 
-  // Normal bot bubbles
   bubble(data.say, 'bot');
   setChips(data.buttons);
 
@@ -195,8 +193,8 @@ input.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') sendMessage(); }
 (function init(){
   bubble("👋 Welkom bij VANA Chat! Ik help je met vragen, prijzen en integraties.\nKies hieronder een optie of stel direct je vraag.", 'bot');
   setChips(['FAQ','Plan een demo','Contact']);
-  fetch('/chat', {
+  fetch(API_PATH, {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ text:'', nodeId:null })
-  }).then(r=>r.json()).then(d => { currentNode = d.nodeId; });
+  }).then(r=>r.json()).then(d => { currentNode = d.nodeId; }).catch(()=>{});
 })();
