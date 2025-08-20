@@ -1,45 +1,46 @@
-const chatBox = document.getElementById('chat-box');
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-const quickActions = document.getElementById('quick-actions');
+let currentNode = null;
+const chat  = document.getElementById('chat');
+const chips = document.getElementById('chips');
+const input = document.getElementById('input');
+const send  = document.getElementById('send');
 
-function bubble(msg, sender='bot') {
-  const div = document.createElement('div');
-  div.className = 'chat-bubble ' + sender;
-  div.textContent = msg;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
+const timeNow = () => new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+function bubble(text, who='bot', withMeta=true){
+  const row = document.createElement('div');
+  row.className = `msg ${who}`;
+  if (who === 'bot') {
+    const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
+    row.appendChild(av);
+  }
+  const wrap = document.createElement('div');
+  const b = document.createElement('div'); b.className = 'bubble'; b.textContent = text; wrap.appendChild(b);
+  if (withMeta) { const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = timeNow(); wrap.appendChild(meta); }
+  row.appendChild(wrap); chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
 }
 
-sendBtn.addEventListener('click', () => {
-  const text = userInput.value.trim();
-  if (!text) return;
-  bubble(text, 'user');
-  userInput.value = '';
-  if (text.toLowerCase().includes('demo')) {
-    openPlanner();
-    bubble('Ik heb de agenda geopend zodat je direct een demo kan inplannen!', 'bot');
-  } else {
-    bubble('Bedankt voor je bericht! Een medewerker neemt zo snel mogelijk contact op.', 'bot');
-  }
-});
+function typing(on=true){
+  if (on){
+    const row = document.createElement('div'); row.className = 'msg bot'; row.id = 'typing';
+    const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
+    const bub = document.createElement('div'); bub.className = 'bubble typing';
+    bub.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+    row.appendChild(av); row.appendChild(bub); chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
+  } else { const t = document.getElementById('typing'); if (t) t.remove(); }
+}
 
-quickActions.addEventListener('click', (e) => {
-  if (e.target.classList.contains('chip')) {
-    const choice = e.target.textContent;
-    bubble(choice, 'user');
-    if (choice === 'Plan een demo') {
-      openPlanner();
-      bubble('Ik heb de agenda geopend zodat je direct een demo kan inplannen!', 'bot');
-    } else if (choice === 'FAQ') {
-      bubble('Je kunt alles vinden in onze FAQ-sectie.', 'bot');
-    } else if (choice === 'Contact') {
-      bubble('Stuur ons een mail via support@vanachat.com.', 'bot');
-    }
-  }
-});
+function setChips(btns) {
+  chips.innerHTML = '';
+  (btns || []).forEach(label => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = label;
+    btn.onclick = () => { input.value = label; sendMessage(); };
+    chips.appendChild(btn);
+  });
+}
 
-// Calendly integratie
+// Calendly helpers
 function loadCalendlyScript() {
   return new Promise((resolve) => {
     if (window.Calendly) return resolve();
@@ -50,14 +51,47 @@ function loadCalendlyScript() {
     document.head.appendChild(s);
   });
 }
-
 async function openPlanner() {
   await loadCalendlyScript();
   document.getElementById('planner-overlay').style.display = 'flex';
 }
+function closePlanner() { document.getElementById('planner-overlay').style.display = 'none'; }
+document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='planner-close') closePlanner(); });
 
-function closePlanner() {
-  document.getElementById('planner-overlay').style.display = 'none';
+async function sendMessage(){
+  const text = input.value.trim();
+  if (!text) return;
+  bubble(text, 'user');
+  input.value = '';
+
+  typing(true);
+  const res = await fetch('/chat', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ text, nodeId: currentNode })
+  }).catch(()=>null);
+  typing(false);
+
+  if (!res) { bubble('Er ging iets mis met de verbinding. Probeer het nog eens.', 'bot'); return; }
+  const data = await res.json();
+  currentNode = data.nodeId;
+  bubble(data.say, 'bot');
+  setChips(data.buttons);
+
+  if (data && data.nodeId === 'faq.demo') {
+    openPlanner();
+  }
 }
 
-document.getElementById('planner-close').addEventListener('click', closePlanner);
+send.addEventListener('click', sendMessage);
+input.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') sendMessage(); });
+
+// Greeting + flow bootstrap
+(function init(){
+  bubble("👋 Welkom bij VANA Chat! Ik help je met vragen, prijzen en integraties.\nKies hieronder een optie of stel direct je vraag.", 'bot');
+  setChips(['FAQ','Plan een demo','Contact']);
+  fetch('/chat', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ text:'', nodeId:null })
+  }).then(r=>r.json()).then(d => { currentNode = d.nodeId; });
+})();

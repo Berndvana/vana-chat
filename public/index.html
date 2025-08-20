@@ -1,54 +1,36 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VANA Chat</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="chat-container">
-    <!-- Header met logo -->
-    <div id="chat-header">
-      <img src="logo.png" alt="VANA Chat logo" class="chat-logo" />
-      <h1>VANA Chat</h1>
-    </div>
+  <div class="chat-shell">
+    <header class="chat-header">
+      <img src="logo.png" alt="VANA Chat" class="logo" />
+      <div class="brand">
+        <div class="title"><span class="blue">VANA</span> <span class="pink">Chat</span></div>
+        <div class="subtitle">Snelle antwoorden • Plan direct een demo</div>
+      </div>
+    </header>
 
-    <!-- Welkomstbericht -->
-    <div id="welcome-card" class="chat-bubble bot">
-      <p>👋 Welkom bij <strong>VANA Chat</strong>!  
-      Ik help je graag met vragen, demo’s of meer informatie.</p>
-      <p>Kies hieronder een optie of stel direct je vraag.</p>
-    </div>
+    <main id="chat" class="chat-body" aria-live="polite" aria-label="Conversatie"></main>
 
-    <!-- Chatvenster -->
-    <div id="chat-box"></div>
+    <div id="chips" class="chips"></div>
 
-    <!-- Quick actions -->
-    <div id="quick-actions">
-      <button class="chip">FAQ</button>
-      <button class="chip">Plan een demo</button>
-      <button class="chip">Contact</button>
-    </div>
-
-    <!-- Typen-indicator -->
-    <div id="typing-indicator" style="display:none">
-      <span></span><span></span><span></span>
-    </div>
-
-    <!-- Inputveld -->
-    <div id="input-container">
-      <input id="user-input" type="text" placeholder="Typ je bericht..." />
-      <button id="send-btn">Verstuur</button>
-    </div>
+    <footer class="composer">
+      <input id="input" type="text" placeholder="Stel je vraag… (bijv. ‘FAQ’ of ‘Plan een demo’)" aria-label="Bericht invoer" />
+      <button id="send" class="btn" aria-label="Verstuur">Verstuur</button>
+    </footer>
   </div>
 
   <!-- Calendly overlay -->
   <div id="planner-overlay" class="planner-overlay" style="display:none;">
     <div class="planner-card">
       <button id="planner-close" class="planner-close" aria-label="Sluiten">✕</button>
-      <div
-        id="calendly-container"
+      <div id="calendly-container"
         class="calendly-inline-widget"
         data-url="https://calendly.com/d/cv46-k7m-n2f"
         style="min-width:320px;height:560px;">
