@@ -1,4 +1,5 @@
 let currentNode = null;
+
 const chat  = document.getElementById('chat');
 const chips = document.getElementById('chips');
 const input = document.getElementById('input');
@@ -58,6 +59,72 @@ async function openPlanner() {
 function closePlanner() { document.getElementById('planner-overlay').style.display = 'none'; }
 document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='planner-close') closePlanner(); });
 
+// --- FAQ Cards + Search ---
+function renderFAQMenu(){
+  const items = [
+    {n:1, t:'Wat is VANA Chat precies?'},
+    {n:2, t:'Voor wie is VANA Chat geschikt?'},
+    {n:3, t:'Hoeveel kost VANA Chat?'},
+    {n:4, t:'Hoe snel kan mijn chatbot live staan?'},
+    {n:5, t:'Wat houdt de eenmalige set-up in?'},
+    {n:6, t:'Wat is inbegrepen in onderhoud?'},
+    {n:7, t:'Kan de bot afspraken inplannen?'},
+    {n:8, t:'Werkt het met WhatsApp/Messenger?'},
+    {n:9, t:'Meerdere talen mogelijk?'},
+    {n:10, t:'Hoe zit het met AVG/GDPR?'},
+    {n:11, t:'Wat als een vraag niet begrepen wordt?'},
+    {n:12, t:'Hoeveel gesprekken kan hij aan?'},
+    {n:13, t:'Kan ik later uitbreiden?'},
+    {n:14, t:'Hoe verloopt de samenwerking?'}
+  ];
+
+  const row = document.createElement('div'); row.className = 'msg bot';
+  const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
+  const wrap = document.createElement('div'); const b = document.createElement('div'); b.className = 'bubble';
+  b.innerHTML = `<strong>Veelgestelde vragen</strong>
+    <div class="faq-wrap">
+      <div class="faq-top">
+        <input id="faq-search" class="faq-search" placeholder="Zoek in FAQ… (bijv. prijs, WhatsApp, AVG)" />
+        <button class="linkish" id="faq-more">Toon alle</button>
+      </div>
+      <div class="faq-grid" id="faq-grid"></div>
+      <div class="faq-actions">
+        <button class="chip" id="faq-demo">Plan een demo</button>
+        <div class="faq-note">Tip: klik op een vraag of gebruik de zoekfunctie</div>
+      </div>
+    </div>`;
+  wrap.appendChild(b); row.appendChild(av); row.appendChild(wrap); chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+
+  const grid = b.querySelector('#faq-grid');
+  const moreBtn = b.querySelector('#faq-more');
+  const search = b.querySelector('#faq-search');
+  const demoBtn = b.querySelector('#faq-demo');
+
+  let expanded = false;
+  let query = '';
+
+  function draw(){
+    grid.innerHTML = '';
+    const base = expanded ? items : items.slice(0,5);
+    base
+      .filter(({t}) => t.toLowerCase().includes(query.toLowerCase()))
+      .forEach(({n,t}) => {
+        const card = document.createElement('div');
+        card.className = 'faq-card';
+        card.innerHTML = `<div class="faq-num">${n}</div><div class="faq-title">${t}</div>`;
+        card.onclick = () => { input.value = String(n); sendMessage(); };
+        grid.appendChild(card);
+      });
+    moreBtn.textContent = expanded ? 'Toon minder' : 'Toon alle';
+  }
+  draw();
+
+  moreBtn.onclick = () => { expanded = !expanded; draw(); };
+  search.addEventListener('input', (e)=>{ query = e.target.value; draw(); });
+  demoBtn.onclick = () => openPlanner();
+}
+
 async function sendMessage(){
   const text = input.value.trim();
   if (!text) return;
@@ -75,6 +142,13 @@ async function sendMessage(){
   if (!res) { bubble('Er ging iets mis met de verbinding. Probeer het nog eens.', 'bot'); return; }
   const data = await res.json();
   currentNode = data.nodeId;
+
+  if (data.nodeId === 'faq.menu') {
+    renderFAQMenu();
+    setChips(['Plan een demo','Contact']);
+    return;
+  }
+
   bubble(data.say, 'bot');
   setChips(data.buttons);
 
@@ -86,7 +160,6 @@ async function sendMessage(){
 send.addEventListener('click', sendMessage);
 input.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') sendMessage(); });
 
-// Greeting + flow bootstrap
 (function init(){
   bubble("👋 Welkom bij VANA Chat! Ik help je met vragen, prijzen en integraties.\nKies hieronder een optie of stel direct je vraag.", 'bot');
   setChips(['FAQ','Plan een demo','Contact']);
