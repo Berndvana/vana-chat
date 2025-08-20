@@ -1,1 +1,36 @@
-<!doctype html><html><body>Replace with your current public/</body></html>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VANA Chat</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chat-header">
+      <img src="logo.png" alt="VANA Chat logo" class="chat-logo" />
+      <h1>VANA Chat</h1>
+    </div>
+    <div id="welcome-card" class="chat-bubble bot">
+      <p>👋 Welkom bij <strong>VANA Chat</strong>!  
+      Ik help je graag met vragen, demo’s of meer informatie.</p>
+      <p>Kies hieronder een optie of stel direct je vraag.</p>
+    </div>
+    <div id="chat-box"></div>
+    <div id="quick-actions">
+      <button class="chip">FAQ</button>
+      <button class="chip">Plan een demo</button>
+      <button class="chip">Contact</button>
+    </div>
+    <div id="typing-indicator" style="display:none">
+      <span></span><span></span><span></span>
+    </div>
+    <div id="input-container">
+      <input id="user-input" type="text" placeholder="Typ je bericht..." />
+      <button id="send-btn">Verstuur</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
