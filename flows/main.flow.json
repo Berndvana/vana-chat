@@ -1,0 +1,651 @@
+{
+  "start": "start",
+  "fallback": "fallback",
+  "nodes": [
+    {
+      "id": "start",
+      "say": "Welkom bij VANA Chat! Kies een optie of typ 'FAQ' om veelgestelde vragen te bekijken.",
+      "buttons": [
+        "FAQ",
+        "Contact",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "intent": "faq"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "contact|telefoon|mail"
+          },
+          "to": "contact"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ],
+      "fallback": "fallback"
+    },
+    {
+      "id": "contact",
+      "say": "Je kunt ons bereiken via je vaste kanaal (e-mail/CRM). Laat hier je vraag achter of ga naar FAQ.",
+      "buttons": [
+        "FAQ",
+        "Terug",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "intent": "faq"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "terug|start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.menu",
+      "say": "VANA Chat — Veelgestelde vragen:\n1) Wat is VANA Chat precies?\n2) Voor wie is VANA Chat geschikt?\n3) Hoeveel kost VANA Chat?\n4) Hoe snel kan mijn chatbot live staan?\n5) Wat houdt de eenmalige set-up in?\n6) Wat is inbegrepen in het maandelijkse onderhoud?\n7) Kan VANA Chat reserveringen of afspraken inplannen?\n8) Werkt VANA Chat ook in WhatsApp of Facebook Messenger?\n9) Kan de chatbot meerdere talen spreken?\n10) Hoe veilig is het gebruik van VANA Chat?\n11) Wat gebeurt er als de chatbot een vraag niet begrijpt?\n12) Hoeveel gesprekken kan de chatbot aan?\n13) Kan ik de chatbot later uitbreiden?\n14) Hoe werkt de samenwerking met VANA Chat?\n\nTyp het nummer (1-14) of klik op een knop.",
+      "buttons": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "Terug",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "^\\s*1\\s*$|wat is vana chat"
+          },
+          "to": "faq.q1"
+        },
+        {
+          "if": {
+            "match": "^\\s*2\\s*$"
+          },
+          "to": "faq.q2"
+        },
+        {
+          "if": {
+            "match": "^\\s*3\\s*$"
+          },
+          "to": "faq.q3"
+        },
+        {
+          "if": {
+            "match": "^\\s*4\\s*$"
+          },
+          "to": "faq.q4"
+        },
+        {
+          "if": {
+            "match": "^\\s*5\\s*$"
+          },
+          "to": "faq.q5"
+        },
+        {
+          "if": {
+            "match": "^\\s*6\\s*$"
+          },
+          "to": "faq.q6"
+        },
+        {
+          "if": {
+            "match": "^\\s*7\\s*$"
+          },
+          "to": "faq.q7"
+        },
+        {
+          "if": {
+            "match": "^\\s*8\\s*$"
+          },
+          "to": "faq.q8"
+        },
+        {
+          "if": {
+            "match": "^\\s*9\\s*$"
+          },
+          "to": "faq.q9"
+        },
+        {
+          "if": {
+            "match": "^\\s*10\\s*$"
+          },
+          "to": "faq.q10"
+        },
+        {
+          "if": {
+            "match": "^\\s*11\\s*$"
+          },
+          "to": "faq.q11"
+        },
+        {
+          "if": {
+            "match": "^\\s*12\\s*$"
+          },
+          "to": "faq.q12"
+        },
+        {
+          "if": {
+            "match": "^\\s*13\\s*$"
+          },
+          "to": "faq.q13"
+        },
+        {
+          "if": {
+            "match": "^\\s*14\\s*$"
+          },
+          "to": "faq.q14"
+        },
+        {
+          "if": {
+            "match": "terug|start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ],
+      "fallback": "faq.menu"
+    },
+    {
+      "id": "faq.q1",
+      "say": "VANA Chat is een AI-gestuurde chatbot die 24/7 klantvragen beantwoordt via je website of WhatsApp. De bot wordt getraind op jouw eigen FAQ’s, teksten en bedrijfsinformatie, zodat klanten altijd direct geholpen worden.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q2",
+      "say": "VANA Chat is geschikt voor mkb-bedrijven zoals restaurants, tandartspraktijken, kapsalons, webshops, advieskantoren en dienstverleners — eigenlijk iedereen met terugkerende klantvragen.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q3",
+      "say": "Starter Pakket: €500 eenmalige set-up + €100/maand onderhoud. Inclusief op maat getrainde chatbot, integratie op je website/WhatsApp en maandelijkse monitoring & updates. Uitgebreidere pakketten zijn beschikbaar.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q4",
+      "say": "Binnen 1 week na de intake kunnen we je chatbot bouwen, testen en integreren — snel live dus.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q5",
+      "say": "Set-up: we verzamelen FAQ’s, openingstijden, diensten, prijzen en andere info. We bouwen de bot, stemmen tone-of-voice af op je merk en regelen de technische integratie.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q6",
+      "say": "Maandelijks onderhoud: we checken prestaties, voeren updates door (zoals gewijzigde tijden of prijzen) en verwerken kleine aanpassingen/uitbreidingen.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q7",
+      "say": "Ja! We kunnen doorverwijzen naar je boekingssysteem of via Zapier/Make afspraken automatisch in je agenda registreren.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q8",
+      "say": "Ja. Naast website-integratie koppelen we met WhatsApp Business of Facebook Messenger — handig als je klanten liever via WhatsApp contact zoeken.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q9",
+      "say": "Standaard Nederlandstalig; Engels of meertalig is mogelijk voor internationale klanten.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q10",
+      "say": "We gebruiken betrouwbare AI-platforms en verwerken gegevens conform AVG/GDPR. Klantdata wordt niet gebruikt om externe AI-modellen te trainen.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q11",
+      "say": "Als de bot het niet weet, sturen we een bericht naar je e-mail of CRM voor opvolging. Ook kunnen we doorverwijzen naar een formulier of telefoonnummer.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q12",
+      "say": "In principe geen limiet: 10 tot 10.000+ gesprekken per maand — de bot verwerkt alles parallel zodat je niets mist.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q13",
+      "say": "Zeker—voeg later extra flows, integraties of kanalen toe (WhatsApp, Messenger, SMS). De bot groeit mee met je bedrijf.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.q14",
+      "say": "Samenwerking: Intake → Bouw & branding → Integratie (website/WhatsApp) → Test & livegang (± 1 week). Daarna maandelijkse updates en monitoring.",
+      "buttons": [
+        "Terug naar FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    },
+    {
+      "id": "faq.demo",
+      "say": "Top! Klik op '📅 Open demo-planner' om direct een afspraak te plannen. Werkt de knop niet? Typ of klik opnieuw 'Plan een demo'.",
+      "buttons": [
+        "📅 Open demo-planner",
+        "Terug naar FAQ",
+        "Start"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "match": "open|planner|demo"
+          },
+          "to": "faq.demo"
+        },
+        {
+          "if": {
+            "match": "faq|terug"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        }
+      ],
+      "fallback": "faq.menu"
+    },
+    {
+      "id": "fallback",
+      "say": "Sorry, dat begreep ik niet. Typ 'FAQ' of kies een optie.",
+      "buttons": [
+        "FAQ",
+        "Start",
+        "Plan een demo"
+      ],
+      "transitions": [
+        {
+          "if": {
+            "intent": "faq"
+          },
+          "to": "faq.menu"
+        },
+        {
+          "if": {
+            "match": "start"
+          },
+          "to": "start"
+        },
+        {
+          "if": {
+            "intent": "demo"
+          },
+          "to": "faq.demo"
+        }
+      ]
+    }
+  ]
+}
