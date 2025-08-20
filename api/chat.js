@@ -1,72 +1,24 @@
-// api/chat.js — Vercel serverless endpoint (no Express).
-// Loads flows and intents from project root using process.cwd().
-
-import fs from "fs";
-import path from "path";
-
-const baseDir = process.cwd();
-
-// Read JSON files
-const flows = JSON.parse(
-  fs.readFileSync(path.join(baseDir, "flows/main.flow.json"), "utf8")
-);
-const intents = JSON.parse(
-  fs.readFileSync(path.join(baseDir, "nlu/intents.json"), "utf8")
-);
-
-const nodes = new Map(flows.nodes.map((n) => [n.id, n]));
-
-// Simple intent detector
-function detectIntent(text = "") {
-  const t = (text || "").toLowerCase();
-  for (const [name, list] of Object.entries(intents)) {
-    if (list.some((p) => new RegExp(p, "i").test(t))) return name;
-  }
-  return null;
-}
-
-function nextNodeFor(text = "", currentId = "start") {
-  const node = nodes.get(currentId) || nodes.get("start");
-  const intent = detectIntent(text);
-
-  // Global transitions
-  const global = [
-    { if: { intent: "demo" }, to: "faq.demo" },
-    { if: { match: "menu|terug" }, to: "faq.menu" },
-  ];
-  for (const tr of global) {
-    if (tr.if?.intent && tr.if.intent === intent) return tr.to;
-    if (tr.if?.match && new RegExp(tr.if.match, "i").test(text)) return tr.to;
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Per-node transitions
-  for (const tr of node.transitions || []) {
-    if (tr.if?.intent && tr.if.intent === intent) return tr.to;
-    if (tr.if?.match && new RegExp(tr.if.match, "i").test(text)) return tr.to;
+  const { text } = req.body;
+
+  const answers = {
+    "wat is vana chat": "VANA Chat is een AI-chatoplossing voor bedrijven.",
+    "hoeveel kost vana chat": "Onze prijzen beginnen vanaf €49 per maand.",
+    "hoe snel live": "Binnen 1 week kan je chatbot live staan."
+  };
+
+  let reply = "Ik begrijp je vraag niet helemaal. Probeer het anders te formuleren.";
+
+  for (const [key, value] of Object.entries(answers)) {
+    if (text.toLowerCase().includes(key)) {
+      reply = value;
+      break;
+    }
   }
 
-  // Fallback
-  return node.fallback || flows.fallback || "fallback";
-}
-
-export default function handler(req, res) {
-  try {
-    const { text = "", nodeId = null } = req.body || {};
-    const startId = nodeId || flows.start || "start";
-    const toId = nextNodeFor(text, startId);
-    const to = nodes.get(toId) || nodes.get("fallback");
-
-    res.status(200).json({
-      nodeId: to.id,
-      say: to.say || "…",
-      buttons: to.buttons || [],
-    });
-  } catch (e) {
-    console.error("Chat API error:", e);
-    res.status(200).json({
-      nodeId: "fallback",
-      say: "⚠️ Er ging iets mis in de serverless functie",
-      buttons: ["FAQ", "Start"],
-    });
-  }
+  res.status(200).json({ reply });
 }

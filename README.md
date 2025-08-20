@@ -1,1 +1,3 @@
-See snippet in embed/snippet.html and replace VANA_CHAT_URL with your Render URL.
+# VANA Chat
+
+Een simpele chatbot met Vercel serverless backend en een UI.

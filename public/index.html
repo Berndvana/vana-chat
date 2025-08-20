@@ -1,60 +1,23 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VANA Chat</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=1" />
 </head>
 <body>
-  <div class="chat-shell">
-    <header class="chat-header">
-      <div class="brand">
-        <div class="title"><span class="blue">VANA</span> <span class="pink">Chat</span></div>
-        <div class="subtitle">Professionele AI-chat • Direct antwoord • Demo in 1 klik</div>
-      </div>
-    </header>
-
-    <main id="chat" class="chat-body" aria-live="polite" aria-label="Conversatie"></main>
-
-    <div id="chips" class="chips"></div>
-
-    <footer class="composer">
-      <input id="input" type="text" placeholder="Stel je vraag… (bijv. ‘prijzen’, ‘WhatsApp’, ‘Plan demo’)" aria-label="Bericht invoer" />
-      <button id="send" class="btn" aria-label="Verstuur">Verstuur</button>
-    </footer>
-  </div>
-
-  <!-- Antwoord overlay -->
-  <div id="answer-overlay" class="answer-overlay" style="display:none;">
-    <div class="answer-card">
-      <div class="answer-head">
-        <div class="answer-title" id="answer-title">Antwoord</div>
-        <button id="answer-close" class="answer-close" aria-label="Sluiten">✕</button>
-      </div>
-      <div id="answer-body" class="answer-body"></div>
-      <div class="answer-ctas">
-        <button class="chip" id="answer-back">← Terug naar FAQ</button>
-        <button class="btn-cta" id="answer-demo">📅 Plan een demo</button>
-      </div>
+  <div id="chat-widget">
+    <h3>🤖 VANA Chat</h3>
+    <div id="messages"></div>
+    <div id="options">
+      <button onclick="sendMessage('Wat is VANA Chat?')">Wat is VANA Chat?</button>
+      <button onclick="sendMessage('Hoeveel kost VANA Chat?')">Hoeveel kost VANA Chat?</button>
+      <button onclick="sendMessage('Hoe snel live?')">Hoe snel live?</button>
     </div>
+    <input id="user-input" placeholder="Typ je vraag..."/>
+    <button onclick="manualSend()">Verstuur</button>
   </div>
-
-  <!-- Calendly overlay -->
-  <div id="planner-overlay" class="planner-overlay" style="display:none;">
-    <div class="planner-card">
-      <button id="planner-close" class="planner-close" aria-label="Sluiten">✕</button>
-      <div id="calendly-container"
-        class="calendly-inline-widget"
-        data-url="https://calendly.com/d/cv46-k7m-n2f"
-        style="min-width:320px;height:560px;">
-      </div>
-    </div>
-  </div>
-
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=1"></script>
 </body>
 </html>
