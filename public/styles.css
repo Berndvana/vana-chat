@@ -12,10 +12,12 @@ display:flex;align-items:center;justify-content:center;padding:32px;}
 .title{font-weight:800;letter-spacing:.2px} .subtitle{font-size:12px;color:var(--muted);margin-top:2px}
 .blue{color:var(--blue)} .pink{color:var(--pink)}
 
-.chat-body{flex:1;padding:16px;overflow-y:auto;background:linear-gradient(180deg,#fff 0,#fafcff 60%);}
-.msg{max-width:82%;margin:10px 0;display:flex;gap:10px;animation:pop .18s ease-out}
+.chat-body{flex:1;padding:16px;overflow-y:auto;overflow-x:hidden;background:linear-gradient(180deg,#fff 0,#fafcff 60%);}
+.msg{max-width:100%;margin:10px 0;display:flex;gap:10px;animation:pop .18s ease-out}
+.msg > div{max-width:100%;}
 @keyframes pop{from{transform:translateY(4px);opacity:.0}to{transform:translateY(0);opacity:1}}
-.bubble{padding:12px 14px;border-radius:16px;line-height:1.45;white-space:pre-wrap;box-shadow:0 1px 0 rgba(2,8,23,.05)}
+.bubble{padding:12px 14px;border-radius:16px;line-height:1.45;white-space:pre-wrap;box-shadow:0 1px 0 rgba(2,8,23,.05);max-width:100%}
+.bubble.wide{width:100%;}
 .bot .bubble{background:var(--bot);border-top-left-radius:6px}
 .user{justify-content:flex-end}.user .bubble{background:var(--user);border-top-right-radius:6px}
 .avatar{width:28px;height:28px;border-radius:8px;background:#eef3ff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--blue)}
@@ -34,15 +36,15 @@ display:flex;align-items:center;justify-content:center;padding:32px;}
 @keyframes bounce{0%,80%,100%{opacity:.35;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
 
 /* WOW: tabs + hero cards + search */
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px;overflow-x:hidden}
 .tab{padding:9px 12px;border-radius:12px;border:1px solid #e7eaf0;background:#fff;cursor:pointer;font-size:13px;font-weight:600}
 .tab.active{border-color:var(--blue);color:var(--blue);box-shadow:var(--ring-sm)}
 .searchbar{display:flex;gap:8px;margin:6px 0 4px}
-.searchbar input{flex:1;border:1px solid #e7eaf0;border-radius:12px;padding:11px 12px;outline:none}
-.faq-grid{display:grid;gap:12px;margin-top:10px}
-@media (min-width: 460px){ .faq-grid{grid-template-columns:1fr 1fr} }
+.searchbar input{flex:1;border:1px solid #e7eaf0;border-radius:12px;padding:11px 12px;outline:none;width:100%}
+.faq-grid{display:grid;gap:12px;margin-top:10px;grid-template-columns:1fr}
+@media (min-width:560px){ .faq-grid{grid-template-columns:1fr 1fr} }
 
-.card{background:#fff;border:1px solid #e7eaf0;border-radius:16px;padding:14px;cursor:pointer;transition:.18s;box-shadow:0 1px 0 rgba(2,8,23,.04);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start}
+.card{background:#fff;border:1px solid #e7eaf0;border-radius:16px;padding:14px;cursor:pointer;transition:.18s;box-shadow:0 1px 0 rgba(2,8,23,.04);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start;width:100%}
 .card:hover{transform:translateY(-2px);border-color:var(--blue);box-shadow:0 10px 26px rgba(2,8,23,.08)}
 .card .icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#eef3ff}
 .card .h{font-weight:700;margin:0 0 2px}
@@ -53,8 +55,8 @@ display:flex;align-items:center;justify-content:center;padding:32px;}
 .answer-card{width:560px;max-width:96vw;max-height:90vh;background:#fff;border-radius:18px;box-shadow:0 28px 90px rgba(2,8,23,.35);border:1px solid #e7eaf0;overflow:auto;animation:pop .18s ease-out}
 .answer-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #e7eaf0;background:linear-gradient(135deg, rgba(37,99,235,.06), rgba(236,72,153,.06))}
 .answer-title{font-weight:800}
-.answer-close{border:0;background:#0f172a;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer}
-.answer-body{padding:16px;white-space:pre-wrap;line-height:1.55}
+.answer-close{border:0;background:#0f172a;color:#fff;width:34px;height:34px;border-radius:10px;cursor:pointer}
+.answer-body{padding:16px;white-space:pre-wrap;line-height:1.55;word-break:break-word}
 .answer-ctas{display:flex;gap:10px;padding:12px 16px;border-top:1px solid #e7eaf0;background:#fff;position:sticky;bottom:0}
 .btn-cta{background:var(--blue);color:#fff;border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
 

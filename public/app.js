@@ -81,7 +81,7 @@ const tabs = ['Alle','Algemeen','Prijzen','Integraties','Veiligheid','Werking'];
 function renderFAQMenu(){
   const row = document.createElement('div'); row.className = 'msg bot';
   const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
-  const wrap = document.createElement('div'); const b = document.createElement('div'); b.className = 'bubble';
+  const wrap = document.createElement('div'); const b = document.createElement('div'); b.className = 'bubble wide';
   b.innerHTML = `
     <h3 style="margin:0 0 6px">Veelgestelde vragen</h3>
     <div class="searchbar">
