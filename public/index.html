@@ -8,29 +8,54 @@
 </head>
 <body>
   <div id="chat-container">
+    <!-- Header met logo -->
     <div id="chat-header">
       <img src="logo.png" alt="VANA Chat logo" class="chat-logo" />
       <h1>VANA Chat</h1>
     </div>
+
+    <!-- Welkomstbericht -->
     <div id="welcome-card" class="chat-bubble bot">
       <p>👋 Welkom bij <strong>VANA Chat</strong>!  
       Ik help je graag met vragen, demo’s of meer informatie.</p>
       <p>Kies hieronder een optie of stel direct je vraag.</p>
     </div>
+
+    <!-- Chatvenster -->
     <div id="chat-box"></div>
+
+    <!-- Quick actions -->
     <div id="quick-actions">
       <button class="chip">FAQ</button>
       <button class="chip">Plan een demo</button>
       <button class="chip">Contact</button>
     </div>
+
+    <!-- Typen-indicator -->
     <div id="typing-indicator" style="display:none">
       <span></span><span></span><span></span>
     </div>
+
+    <!-- Inputveld -->
     <div id="input-container">
       <input id="user-input" type="text" placeholder="Typ je bericht..." />
       <button id="send-btn">Verstuur</button>
     </div>
   </div>
+
+  <!-- Calendly overlay -->
+  <div id="planner-overlay" class="planner-overlay" style="display:none;">
+    <div class="planner-card">
+      <button id="planner-close" class="planner-close" aria-label="Sluiten">✕</button>
+      <div
+        id="calendly-container"
+        class="calendly-inline-widget"
+        data-url="https://calendly.com/d/cv46-k7m-n2f"
+        style="min-width:320px;height:560px;">
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
