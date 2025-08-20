@@ -58,38 +58,38 @@ async function openPlanner() {
 function closePlanner() { document.getElementById('planner-overlay').style.display = 'none'; }
 document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='planner-close') closePlanner(); });
 
-// --- FAQ SaaS WOW ---
+// --- SaaS WOW data ---
 const faqItems = [
-  {n:1,  t:'Wat is VANA Chat precies?',                 cat:'Algemeen',      p:'Korte uitleg wat de chatbot doet.'},
-  {n:2,  t:'Voor wie is VANA Chat geschikt?',           cat:'Algemeen',      p:'Sectoren en type bedrijven.'},
-  {n:3,  t:'Hoeveel kost VANA Chat?',                    cat:'Prijzen',       p:'Starter pakket, onderhoud, opties.'},
-  {n:4,  t:'Hoe snel kan mijn chatbot live staan?',      cat:'Werking',       p:'Doorlooptijd vanaf intake.'},
-  {n:5,  t:'Wat houdt de eenmalige set-up in?',          cat:'Werking',       p:'Wat we verzamelen en bouwen.'},
-  {n:6,  t:'Wat is inbegrepen in het onderhoud?',        cat:'Werking',       p:'Monitoring en updates.'},
-  {n:7,  t:'Kan de bot afspraken inplannen?',            cat:'Integraties',   p:'Boekingen via agenda/Zapier.'},
-  {n:8,  t:'Werkt het met WhatsApp/Messenger?',          cat:'Integraties',   p:'WhatsApp Business, FB Messenger.'},
-  {n:9,  t:'Meerdere talen mogelijk?',                   cat:'Werking',       p:'NL standaard, meertalig optie.'},
-  {n:10, t:'Hoe zit het met AVG/GDPR?',                  cat:'Veiligheid',    p:'Data, platform, privacy.'},
-  {n:11, t:'Wat als een vraag niet begrepen wordt?',     cat:'Werking',       p:'Fallback naar mail/CRM.'},
-  {n:12, t:'Hoeveel gesprekken kan hij aan?',            cat:'Werking',       p:'Schaal tot 10.000+.'},
-  {n:13, t:'Kan ik later uitbreiden?',                   cat:'Integraties',   p:'Flows, kanalen, koppelingen.'},
-  {n:14, t:'Hoe verloopt de samenwerking?',              cat:'Algemeen',      p:'Intake → bouw → live → update.'},
+  {n:1,  t:'Wat is VANA Chat precies?',                 cat:'Algemeen',    p:'Wat doet de chatbot en hoe helpt hij klanten?', icon:'💡'},
+  {n:2,  t:'Voor wie is VANA Chat geschikt?',           cat:'Algemeen',    p:'Sectoren en type bedrijven die profiteren.',   icon:'👥'},
+  {n:3,  t:'Hoeveel kost VANA Chat?',                    cat:'Prijzen',     p:'Starter pakket, onderhoud en uitbreidingen.',  icon:'💰'},
+  {n:4,  t:'Hoe snel kan mijn chatbot live staan?',      cat:'Werking',     p:'Doorlooptijd van intake tot livegang.',        icon:'⚡'},
+  {n:5,  t:'Wat houdt de eenmalige set-up in?',          cat:'Werking',     p:'Welke info we verzamelen en opzetten.',        icon:'🧩'},
+  {n:6,  t:'Wat is inbegrepen in onderhoud?',            cat:'Werking',     p:'Monitoring, updates en kleine uitbreidingen.', icon:'🔧'},
+  {n:7,  t:'Kan de bot afspraken inplannen?',            cat:'Integraties', p:'Koppeling met agenda, Zapier/Make.',           icon:'📅'},
+  {n:8,  t:'Werkt het met WhatsApp/Messenger?',          cat:'Integraties', p:'WhatsApp Business en Facebook Messenger.',     icon:'📲'},
+  {n:9,  t:'Meerdere talen mogelijk?',                   cat:'Werking',     p:'NL standaard; meertalig optioneel.',           icon:'🌍'},
+  {n:10, t:'Hoe zit het met AVG/GDPR?',                  cat:'Veiligheid',  p:'Data, beveiliging en privacybeleid.',          icon:'🔒'},
+  {n:11, t:'Wat als een vraag niet begrepen wordt?',     cat:'Werking',     p:'Fallback naar e-mail/CRM of formulier.',       icon:'🔁'},
+  {n:12, t:'Hoeveel gesprekken kan hij aan?',            cat:'Werking',     p:'Schaal van 10–10.000+ gesprekken.',            icon:'📈'},
+  {n:13, t:'Kan ik later uitbreiden?',                   cat:'Integraties', p:'Extra flows, kanalen, koppelingen.',           icon:'🌱'},
+  {n:14, t:'Hoe verloopt de samenwerking?',              cat:'Algemeen',    p:'Intake → bouw → integratie → updates.',        icon:'🤝'},
 ];
 const tabs = ['Alle','Algemeen','Prijzen','Integraties','Veiligheid','Werking'];
 
+// Render WOW FAQ
 function renderFAQMenu(){
-  // container bubble
   const row = document.createElement('div'); row.className = 'msg bot';
   const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
   const wrap = document.createElement('div'); const b = document.createElement('div'); b.className = 'bubble';
   b.innerHTML = `
-    <strong>Veelgestelde vragen</strong>
+    <h3 style="margin:0 0 6px">Veelgestelde vragen</h3>
     <div class="searchbar">
       <input id="faq-search" placeholder="🔍  Zoek in FAQ… (bijv. prijs, WhatsApp, AVG)" />
     </div>
     <div class="tabs" id="faq-tabs"></div>
     <div class="faq-grid" id="faq-grid"></div>
-    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
       <button class="chip" id="faq-demo">📅 Plan een demo</button>
       <button class="chip" id="faq-contact">Contact</button>
     </div>`;
@@ -122,7 +122,8 @@ function renderFAQMenu(){
       .filter(i => i.t.toLowerCase().includes(query) || i.p.toLowerCase().includes(query))
       .forEach(i => {
         const card = document.createElement('div'); card.className = 'card';
-        card.innerHTML = `<div class="h">${i.t}</div><p class="p">${i.p}</p>`;
+        card.innerHTML = `<div class="icon">${i.icon}</div>
+                          <div><div class="h">${i.t}</div><p class="p">${i.p}</p></div>`;
         card.onclick = () => { input.value = String(i.n); sendMessage(); };
         grid.appendChild(card);
       });
@@ -173,7 +174,6 @@ async function sendMessage(){
 
   // Intercept FAQ answers (faq.q1..faq.q14)
   if (/^faq\.q\d+$/.test(data.nodeId)) {
-    // show in overlay
     const item = faqItems.find(x => `faq.q${x.n}` === data.nodeId);
     openAnswer(item ? item.t : 'Antwoord', data.say);
     setChips(['Plan een demo','Terug naar FAQ']);
