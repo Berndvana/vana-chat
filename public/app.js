@@ -1,5 +1,4 @@
 let currentNode = null;
-
 const chat  = document.getElementById('chat');
 const chips = document.getElementById('chips');
 const input = document.getElementById('input');
@@ -59,71 +58,94 @@ async function openPlanner() {
 function closePlanner() { document.getElementById('planner-overlay').style.display = 'none'; }
 document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='planner-close') closePlanner(); });
 
-// --- FAQ Cards + Search ---
-function renderFAQMenu(){
-  const items = [
-    {n:1, t:'Wat is VANA Chat precies?'},
-    {n:2, t:'Voor wie is VANA Chat geschikt?'},
-    {n:3, t:'Hoeveel kost VANA Chat?'},
-    {n:4, t:'Hoe snel kan mijn chatbot live staan?'},
-    {n:5, t:'Wat houdt de eenmalige set-up in?'},
-    {n:6, t:'Wat is inbegrepen in onderhoud?'},
-    {n:7, t:'Kan de bot afspraken inplannen?'},
-    {n:8, t:'Werkt het met WhatsApp/Messenger?'},
-    {n:9, t:'Meerdere talen mogelijk?'},
-    {n:10, t:'Hoe zit het met AVG/GDPR?'},
-    {n:11, t:'Wat als een vraag niet begrepen wordt?'},
-    {n:12, t:'Hoeveel gesprekken kan hij aan?'},
-    {n:13, t:'Kan ik later uitbreiden?'},
-    {n:14, t:'Hoe verloopt de samenwerking?'}
-  ];
+// --- FAQ SaaS WOW ---
+const faqItems = [
+  {n:1,  t:'Wat is VANA Chat precies?',                 cat:'Algemeen',      p:'Korte uitleg wat de chatbot doet.'},
+  {n:2,  t:'Voor wie is VANA Chat geschikt?',           cat:'Algemeen',      p:'Sectoren en type bedrijven.'},
+  {n:3,  t:'Hoeveel kost VANA Chat?',                    cat:'Prijzen',       p:'Starter pakket, onderhoud, opties.'},
+  {n:4,  t:'Hoe snel kan mijn chatbot live staan?',      cat:'Werking',       p:'Doorlooptijd vanaf intake.'},
+  {n:5,  t:'Wat houdt de eenmalige set-up in?',          cat:'Werking',       p:'Wat we verzamelen en bouwen.'},
+  {n:6,  t:'Wat is inbegrepen in het onderhoud?',        cat:'Werking',       p:'Monitoring en updates.'},
+  {n:7,  t:'Kan de bot afspraken inplannen?',            cat:'Integraties',   p:'Boekingen via agenda/Zapier.'},
+  {n:8,  t:'Werkt het met WhatsApp/Messenger?',          cat:'Integraties',   p:'WhatsApp Business, FB Messenger.'},
+  {n:9,  t:'Meerdere talen mogelijk?',                   cat:'Werking',       p:'NL standaard, meertalig optie.'},
+  {n:10, t:'Hoe zit het met AVG/GDPR?',                  cat:'Veiligheid',    p:'Data, platform, privacy.'},
+  {n:11, t:'Wat als een vraag niet begrepen wordt?',     cat:'Werking',       p:'Fallback naar mail/CRM.'},
+  {n:12, t:'Hoeveel gesprekken kan hij aan?',            cat:'Werking',       p:'Schaal tot 10.000+.'},
+  {n:13, t:'Kan ik later uitbreiden?',                   cat:'Integraties',   p:'Flows, kanalen, koppelingen.'},
+  {n:14, t:'Hoe verloopt de samenwerking?',              cat:'Algemeen',      p:'Intake → bouw → live → update.'},
+];
+const tabs = ['Alle','Algemeen','Prijzen','Integraties','Veiligheid','Werking'];
 
+function renderFAQMenu(){
+  // container bubble
   const row = document.createElement('div'); row.className = 'msg bot';
   const av = document.createElement('div'); av.className = 'avatar'; av.textContent = 'VC';
   const wrap = document.createElement('div'); const b = document.createElement('div'); b.className = 'bubble';
-  b.innerHTML = `<strong>Veelgestelde vragen</strong>
-    <div class="faq-wrap">
-      <div class="faq-top">
-        <input id="faq-search" class="faq-search" placeholder="Zoek in FAQ… (bijv. prijs, WhatsApp, AVG)" />
-        <button class="linkish" id="faq-more">Toon alle</button>
-      </div>
-      <div class="faq-grid" id="faq-grid"></div>
-      <div class="faq-actions">
-        <button class="chip" id="faq-demo">Plan een demo</button>
-        <div class="faq-note">Tip: klik op een vraag of gebruik de zoekfunctie</div>
-      </div>
+  b.innerHTML = `
+    <strong>Veelgestelde vragen</strong>
+    <div class="searchbar">
+      <input id="faq-search" placeholder="🔍  Zoek in FAQ… (bijv. prijs, WhatsApp, AVG)" />
+    </div>
+    <div class="tabs" id="faq-tabs"></div>
+    <div class="faq-grid" id="faq-grid"></div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <button class="chip" id="faq-demo">📅 Plan een demo</button>
+      <button class="chip" id="faq-contact">Contact</button>
     </div>`;
   wrap.appendChild(b); row.appendChild(av); row.appendChild(wrap); chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 
   const grid = b.querySelector('#faq-grid');
-  const moreBtn = b.querySelector('#faq-more');
   const search = b.querySelector('#faq-search');
+  const tabsEl = b.querySelector('#faq-tabs');
   const demoBtn = b.querySelector('#faq-demo');
+  const contactBtn = b.querySelector('#faq-contact');
 
-  let expanded = false;
-  let query = '';
+  let query = ''; let active = 'Alle';
+
+  function drawTabs(){
+    tabsEl.innerHTML = '';
+    tabs.forEach(t => {
+      const el = document.createElement('button');
+      el.className = 'tab' + (t===active ? ' active' : '');
+      el.textContent = t;
+      el.onclick = () => { active = t; draw(); drawTabs(); };
+      tabsEl.appendChild(el);
+    });
+  }
 
   function draw(){
     grid.innerHTML = '';
-    const base = expanded ? items : items.slice(0,5);
-    base
-      .filter(({t}) => t.toLowerCase().includes(query.toLowerCase()))
-      .forEach(({n,t}) => {
-        const card = document.createElement('div');
-        card.className = 'faq-card';
-        card.innerHTML = `<div class="faq-num">${n}</div><div class="faq-title">${t}</div>`;
-        card.onclick = () => { input.value = String(n); sendMessage(); };
+    faqItems
+      .filter(i => (active==='Alle' || i.cat===active))
+      .filter(i => i.t.toLowerCase().includes(query) || i.p.toLowerCase().includes(query))
+      .forEach(i => {
+        const card = document.createElement('div'); card.className = 'card';
+        card.innerHTML = `<div class="h">${i.t}</div><p class="p">${i.p}</p>`;
+        card.onclick = () => { input.value = String(i.n); sendMessage(); };
         grid.appendChild(card);
       });
-    moreBtn.textContent = expanded ? 'Toon minder' : 'Toon alle';
   }
-  draw();
 
-  moreBtn.onclick = () => { expanded = !expanded; draw(); };
-  search.addEventListener('input', (e)=>{ query = e.target.value; draw(); });
+  search.addEventListener('input', e => { query = e.target.value.trim().toLowerCase(); draw(); });
   demoBtn.onclick = () => openPlanner();
+  contactBtn.onclick = () => { input.value = 'Contact'; sendMessage(); };
+
+  drawTabs(); draw();
 }
+
+// Answer overlay
+function openAnswer(title, text){
+  const overlay = document.getElementById('answer-overlay');
+  document.getElementById('answer-title').textContent = title || 'Antwoord';
+  document.getElementById('answer-body').textContent = text || '';
+  overlay.style.display = 'flex';
+}
+function closeAnswer(){ document.getElementById('answer-overlay').style.display = 'none'; }
+document.getElementById('answer-close').addEventListener('click', closeAnswer);
+document.getElementById('answer-back').addEventListener('click', ()=>{ closeAnswer(); renderFAQMenu(); });
+document.getElementById('answer-demo').addEventListener('click', ()=>{ closeAnswer(); openPlanner(); });
 
 async function sendMessage(){
   const text = input.value.trim();
@@ -133,8 +155,7 @@ async function sendMessage(){
 
   typing(true);
   const res = await fetch('/chat', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ text, nodeId: currentNode })
   }).catch(()=>null);
   typing(false);
@@ -143,12 +164,23 @@ async function sendMessage(){
   const data = await res.json();
   currentNode = data.nodeId;
 
+  // Intercept FAQ menu
   if (data.nodeId === 'faq.menu') {
     renderFAQMenu();
     setChips(['Plan een demo','Contact']);
     return;
   }
 
+  // Intercept FAQ answers (faq.q1..faq.q14)
+  if (/^faq\.q\d+$/.test(data.nodeId)) {
+    // show in overlay
+    const item = faqItems.find(x => `faq.q${x.n}` === data.nodeId);
+    openAnswer(item ? item.t : 'Antwoord', data.say);
+    setChips(['Plan een demo','Terug naar FAQ']);
+    return;
+  }
+
+  // Normal bot bubbles
   bubble(data.say, 'bot');
   setChips(data.buttons);
 
